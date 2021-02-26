@@ -1,0 +1,35 @@
+nano /etc/apt/sources.list
+	non-free contrib
+
+nano /etc/default/grub
+	nouveau.modeset=0 pci=nomsi
+        2
+
+nano /etc/modprobe.d/blacklist-dell-smbios.conf
+	install dell-smbios /bin/false
+	
+blkid
+
+nano /etc/fstab
+	/mnt ext-4 errors=remount-ro 0 1
+
+
+apt update && apt install -y firmware-atheros firmware-linux-nonfree firmware-realtek network-manager-openvpn-gnome
+
+apt remove yelp baobab gnome-characters gnome-system-monitor gnome-calendar gnome-clocks gnome-contacts gnome-games gnome-documents gnome-klotski 
+gnome-logs gnome-mahjongg gnome-maps gnome-mines gnome-nibbles gnome-robots gnome-sudoku gnome-taquin gnome-tetravex gnome-todo gnome-weather 
+five-or-more evolution hitori iagno shotwell swell-foop tali simple-scan gnome-chess four-in-a-row lightsoff quadrapassel seahorse
+rhythmbox gnome-bluetooth libreoffice-* gnome-music gnome-sound-recorder cheese gnome-calculator gnome-software totem software-properties-gtk transmission-gtk
+
+update-grub
+
+nano /root/.profile
+
+reboot
+
+dmesg --level=err
+
+apt install qemu-kvm libvirt-daemon bridge-utils virtinst libvirt-daemon-system virt-top libguestfs-tools libosinfo-bin qemu-system virt-manager
+
+#Guest VM
+apt install spice-vdagent

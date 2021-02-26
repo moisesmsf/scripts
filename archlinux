@@ -1,0 +1,39 @@
+loadkeys br-abnt2
+timedatectl set-ntp true
+timedatectl set-timezone America/Maceio
+cfdisk
+mkfs.ext4 /dev/nvme0n1p2 && mount /dev/nvme0n1p2 /mnt && mkdir -p /mnt/{boot,files}
+mkfs.fat -F32 /dev/nvme0n1p1 && mount /dev/nvme0n1p1 /mnt/boot
+mkswap /dev/sda2 && swapon /dev/sda2
+pacstrap /mnt base linux linux-firmware nano pacman firefox efibootmgr findutils which gnome gnome-tweaks libreoffice-fresh vlc bash-completion alsa-utils nfts-3g
+genfstab -U /mnt >> /mnt/etc/fstab
+arch-chroot /mnt
+=============================
+ln -sf /usr/share/zoneinfo/America/Maceio /etc/localtime && hwclock --systohc
+nano /etc/locale-gen
+locale-gen
+echo LANG=en_US.UTF8 > /etc/locale.conf
+echo KEYMAP=br > /etc/vconsole.conf
+echo myhostname > /etc/hostname
+nano /etc/hosts
+	127.0.0.1	localhost
+	::1		localhost
+	127.0.1.1	myhostname.localdomain myhostname
+nano /etc/mkinitcpio.conf
+	MODULES= intel_agp i915
+mkinitcpio -P && passwd
+nano /boot/loader/loader.conf
+	timeout 2
+	console-mode max
+	default arch.conf
+	editor no
+nano /boot/loader/entries/arch.conf
+	title	Arch Linux
+	linux	/vmlinuz-linux
+	initrd	/initramfs-linux.img
+	options	root=/dev/nvme0n1p2 rw	
+systemctl enable gdm NetwokManager bluetooth && useradd --create-home r && passwd r
+exit
+=============================
+umount -R /mnt && reboot
+pacman -Rns vino sane simple-scan gnome-system-monitor gnome-photos baobab gnome-books gnome-clocks gnome-contacts gnome-calendar gnome-documents gnome-getting-started-docs gnome-weather gnome-user-docs gnome-music totem
