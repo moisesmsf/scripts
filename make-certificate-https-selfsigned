@@ -1,0 +1,7 @@
+#!/bin/bash
+#openssl genrsa -aes256 -out ca-dev.key 4096
+#openssl req -x509 -new -nodes -key ca-dev.key -sha256 -days 1024 -out ca-dev.crt
+
+openssl genrsa -out service.devel.dev.key 2048 \
+&& openssl req -new -sha256 -key service.devel.dev.key -subj "/C=BR/ST=SP/L=Sao Paulo/O=DEV/OU=DEVEL/CN=service.devel.dev/emailAddress=service.devel@dev.com" -addext "subjectAltName = DNS:service.devel.dev" -out service.devel.dev.csr \
+&& openssl x509 -req -in service.devel.dev.csr -CA ca-dev.crt -CAkey ca-dev.key -CAcreateserial -out service.devel.dev.crt -days 365 -sha256
